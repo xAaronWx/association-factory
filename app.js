@@ -17,6 +17,7 @@ app.use("/user", controllers.User);
 app.use("/address", controllers.Address);
 app.use("/baby", controllers.Baby);
 
+// add the .then(() => db.sync({force: true})) to start an append then remove after the join
 db.authenticate()
   .then(() => db.sync())
   .then(() =>
