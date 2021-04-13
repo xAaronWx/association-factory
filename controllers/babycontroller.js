@@ -9,6 +9,13 @@ router.post("/test", function (req, res) {
 });
 router.post("/create", validateSession, function (req, res) {
   console.log(req.user.id);
+
+  // This is one way to validate a role
+  if (req.user.role != "Admin") {
+    res.json;
+    ({ message: "You are not an Admin" });
+  }
+
   const babyEntry = {
     name: req.body.name,
     sex: req.body.sex,

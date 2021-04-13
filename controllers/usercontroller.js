@@ -20,6 +20,7 @@ router.post("/create", function (req, res) {
   User.create({
     username: req.body.username,
     passwordhash: bcrypt.hashSync(req.body.password, 13),
+    role: "User", // HARD CODE THE ROLE!!!!!!
   })
     .then(function createSuccess(user) {
       let token = jwt.sign({ id: user.id, username: user.username }, "test", {
@@ -44,27 +45,28 @@ router.post("/login", function (req, res) {
   })
     .then(function loginSuccess(user) {
       if (user) {
-        bcrypt.compare(req.body.password, user.passwordhash, function (
-          err,
-          matches
-        ) {
-          if (matches) {
-            let token = jwt.sign(
-              { id: user.id, username: user.username },
-              "test",
-              {
-                expiresIn: 60 * 60 * 24,
-              }
-            );
-            res.status(200).json({
-              user: user,
-              message: "User Successfully Logged in!",
-              sessionToken: token,
-            });
-          } else {
-            res.status(502).send({ error: "Login Failed" });
+        bcrypt.compare(
+          req.body.password,
+          user.passwordhash,
+          function (err, matches) {
+            if (matches) {
+              let token = jwt.sign(
+                { id: user.id, username: user.username },
+                "test",
+                {
+                  expiresIn: 60 * 60 * 24,
+                }
+              );
+              res.status(200).json({
+                user: user,
+                message: "User Successfully Logged in!",
+                sessionToken: token,
+              });
+            } else {
+              res.status(502).send({ error: "Login Failed" });
+            }
           }
-        });
+        );
       } else {
         res.status(500).json({ error: "User does not exist" });
       }

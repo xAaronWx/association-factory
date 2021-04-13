@@ -21,7 +21,7 @@ app.use("/baby", controllers.Baby);
 db.authenticate()
   .then(() => db.sync())
   .then(() =>
-    app.listen(3000, () => {
+    app.listen(3005, () => {
       console.log(`[server]: App is listening on localhost:3000`);
     })
   )
